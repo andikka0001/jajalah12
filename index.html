@@ -1526,6 +1526,7 @@ function cekKoneksiAwal() {
 function toggleNotifikasi() {
   if (typeof Android !== "undefined") {
     Android.toggleNotifikasi();
+    Android.showWelcomeNotification(); // Panggil setelah aktif
   }
 }
 
@@ -3668,6 +3669,12 @@ const fileName = `pdf/${namaUser}_laporan_${timestamp}.pdf`;
                 }
             });
         }
+    }
+
+    function aturNotifikasiJadwal(jam, pesan) {
+      if (typeof Android !== "undefined") {
+        Android.scheduleNotification(jam, pesan);
+      }
     }
 
   </script>
