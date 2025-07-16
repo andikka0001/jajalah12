@@ -20,7 +20,7 @@
     }
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap');
     body {
-      background-image: var(--bg-image-url, url('https://files.catbox.moe/sxim3d.jpg'));
+      background-image: var(--bg-image-url, url('media/bg.jpg'));
       background-repeat: no-repeat;
       background-position: center center;
       background-size: cover;
@@ -1510,12 +1510,9 @@
 <!-- DITAMBAHKAN UNTUK IMPLEMENTASI SEMUA FITUR --><script>
 // --- CEK INTERNET & VERSI APLIKASI ---
 function cekKoneksiAwal() {
-  fetch("https://andikka0001.github.io/verifikasi-web/version.txt", { cache: "no-store" })
-    .then(res => res.text())
-    .then(version => {
-      if (typeof Android !== "undefined") {
-        Android.verifikasiVersi(version.trim());
-      }
+  fetch("https://www.google.com", { mode: "no-cors" })
+    .then(() => {
+      console.log("Koneksi tersedia.");
     })
     .catch(() => {
       window.location.href = "file:///android_asset/error.html";
@@ -1526,6 +1523,15 @@ function cekKoneksiAwal() {
 function toggleNotifikasi() {
   if (typeof Android !== "undefined") {
     Android.toggleNotifikasi();
+    // Panggil notifikasi sambutan setelah berhasil mengaktifkan notifikasi
+    Android.showWelcomeNotification();
+  }
+}
+
+// --- FUNGSI PENJADWALAN NOTIFIKASI ---
+function aturNotifikasiJadwal(jam, pesan) {
+  if (typeof Android !== "undefined") {
+    Android.scheduleNotification(jam, pesan);
   }
 }
 
@@ -1548,6 +1554,11 @@ function cekKoneksiUntukFitur(callbackJikaOnline) {
 
 window.onload = function() {
   cekKoneksiAwal(); // Jalankan verifikasi koneksi saat aplikasi dibuka
+  
+  // Contoh penjadwalan notifikasi
+  aturNotifikasiJadwal("05:59", "Agenda Pagi akan dimulai");
+  aturNotifikasiJadwal("12:00", "Waktu istirahat siang");
+  aturNotifikasiJadwal("18:00", "Waktu untuk review agenda hari ini");
 };
 </script><!-- AKHIR IMPLEMENTASI TAMBAHAN -->
 </head>
@@ -1612,16 +1623,16 @@ window.onload = function() {
     </div>
     <h2>Pilih Tema Latar Belakang</h2>
     <div class="background-grid">
-      <img src="https://files.catbox.moe/xtcb9j.jpg" onclick="confirmImageTheme('https://files.catbox.moe/xtcb9j.jpg')" alt="Latar 1" />
-      <img src="https://files.catbox.moe/m34hwi.jpg" onclick="confirmImageTheme('https://files.catbox.moe/m34hwi.jpg')" alt="Latar 2" />
-      <img src="https://files.catbox.moe/7kizkm.jpg" onclick="confirmImageTheme('https://files.catbox.moe/7kizkm.jpg')" alt="Latar 3" />
-      <img src="https://files.catbox.moe/6inu37.jpg" onclick="confirmImageTheme('https://files.catbox.moe/6inu37.jpg')" alt="Latar 4" />
-      <img src="https://files.catbox.moe/mq9zmw.jpg" onclick="confirmImageTheme('https://files.catbox.moe/mq9zmw.jpg')" alt="Latar 5" />
-      <img src="https://files.catbox.moe/mhhmd9.jpg" onclick="confirmImageTheme('https://files.catbox.moe/mhhmd9.jpg')" alt="Latar 6" />
-      <img src="https://files.catbox.moe/60s2gr.jpg" onclick="confirmImageTheme('https://files.catbox.moe/60s2gr.jpg')" alt="Latar 7" />
-      <img src="https://files.catbox.moe/29u9l1.jpg" onclick="confirmImageTheme('https://files.catbox.moe/29u9l1.jpg')" alt="Latar 8" />
-      <img src="https://files.catbox.moe/dp6gal.jpg" onclick="confirmImageTheme('https://files.catbox.moe/dp6gal.jpg')" alt="Latar 9" />
-      <img src="https://files.catbox.moe/2juexf.jpg" onclick="confirmImageTheme('https://files.catbox.moe/2juexf.jpg')" alt="Latar 10" />
+      <img src="media/tema1.jpg" onclick="confirmImageTheme('media/tema1.jpg')" alt="Latar 1" />
+      <img src="media/tema2.jpg" onclick="confirmImageTheme('media/tema2.jpg')" alt="Latar 2" />
+      <img src="media/tema3.jpg" onclick="confirmImageTheme('media/tema3.jpg')" alt="Latar 3" />
+      <img src="media/tema4.jpg" onclick="confirmImageTheme('media/tema4.jpg')" alt="Latar 4" />
+      <img src="media/tema5.jpg" onclick="confirmImageTheme('media/tema5.jpg')" alt="Latar 5" />
+      <img src="media/tema6.jpg" onclick="confirmImageTheme('media/tema6.jpg')" alt="Latar 6" />
+      <img src="media/tema7.jpg" onclick="confirmImageTheme('media/tema7.jpg')" alt="Latar 7" />
+      <img src="media/tema8.jpg" onclick="confirmImageTheme('media/tema8.jpg')" alt="Latar 8" />
+      <img src="media/tema9.jpg" onclick="confirmImageTheme('media/tema9.jpg')" alt="Latar 9" />
+      <img src="media/tema10.jpg" onclick="confirmImageTheme('media/tema10.jpg')" alt="Latar 10" />
     </div>
     <div class="custom-theme-container">
         <button class="btn btn-custom-theme" onclick="triggerCustomTheme()">Unggah Tema Custom</button>
@@ -2016,7 +2027,10 @@ window.onload = function() {
           </div>
 
           <div class="sidebar-action-buttons">
-              <button class="btn-sidebar-action btn-new-update" onclick="openUpdateInBrowser()">
+              <button class="btn-sidebar-action btn-notification-toggle" onclick="toggleNotifikasi()">
+                  🔔 Aktifkan / Nonaktifkan Notifikasi
+              </button>
+              <button class="btn-sidebar-action btn-new-update" onclick="cekKoneksiUntukFitur(() => openUpdateInBrowser())">
                   🔥 Cek Update
               </button>
               <button class="btn-sidebar-action btn-export-project" onclick="showExportPopup()">
@@ -2025,7 +2039,7 @@ window.onload = function() {
               <button class="btn-sidebar-action btn-import-project" onclick="showImportPopup()">
                   📥 Import Project
               </button>
-              <button class="btn-sidebar-action btn-export-pdf" onclick="showPdfConfirmPopup()">
+              <button class="btn-sidebar-action btn-export-pdf" onclick="cekKoneksiUntukFitur(() => showPdfConfirmPopup())">
                   📄 Export ke PDF
               </button>
           </div>
@@ -2034,13 +2048,13 @@ window.onload = function() {
       <button class="btn-keluar-sidebar" onclick="showExitConfirmPopup()">Keluar</button>
 
       <div class="social-icons-container">
-          <a href="https://www.facebook.com/share/1XPb1Uti5i/" target="_blank" class="social-icon" aria-label="Facebook">
+          <a href="javascript:void(0);" onclick="cekKoneksiUntukFitur(() => window.open('https://www.facebook.com/share/1XPb1Uti5i/', '_blank'))" class="social-icon" aria-label="Facebook">
               <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14 13.5h2.5L17 9h-3v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.053-1.6-.144-3.04-.144C10.66 2 9 3.65 9 6.7v2.8H6v4.5h3V22h5v-8.5z"/></svg>
           </a>
-          <a href="https://www.instagram.com/aminnu.s?igsh=dWV0bndhYmt6aDI1" target="_blank" class="social-icon" aria-label="Instagram">
+          <a href="javascript:void(0);" onclick="cekKoneksiUntukFitur(() => window.open('https://www.instagram.com/aminnu.s?igsh=dWV0bndhYmt6aDI1', '_blank'))" class="social-icon" aria-label="Instagram">
               <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4c0 3.2-2.6 5.8-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8C2 4.6 4.6 2 7.8 2zm-.2 2A2.02 2.02 0 0 0 4 6.02V16.2C4 17.65 5.35 19 6.78 19h8.43c1.45 0 2.78-1.35 2.78-2.78V7.8c0-1.45-1.35-2.78-2.78-2.78H7.6zm9.6.48c-.9 0-1.62.73-1.62 1.62s.73 1.62 1.62 1.62c.9 0 1.62-.73 1.62-1.62s-.73-1.62-1.62-1.62zm-4.8 3.7c-2.48 0-4.5 2.02-4.5 4.5s2.02 4.5 4.5 4.5 4.5-2.02 4.5-4.5-2.02-4.5-4.5-4.5zm0 2.5c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2z"/></svg>
           </a>
-          <a href="https://andikka0001.github.io/agendaku-komersial/" target="_blank" class="social-icon" aria-label="Website">
+          <a href="javascript:void(0);" onclick="cekKoneksiUntukFitur(() => window.open('https://andikka0001.github.io/agendaku-komersial/', '_blank'))" class="social-icon" aria-label="Website">
               <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v.93zm6.75-3.95c.23-.29.43-.58.62-.89l-1.3-.87c-.33.31-.69.64-1.08.96l1.76.8zm.51-1.28c.36-.59.69-1.2.98-1.84H14v-2h6.13c-.49-1.74-1.83-3.13-3.57-4.04l-1.76.99c.31.29.59.59.86.89l1.45-1.45L12 3.06V2.05c3.08.75 5.51 3.5 6 6.95h-2.1c-.5-1.34-1.49-2.43-2.77-3.14l1.83-1.83c1.7 2 2.77 4.58 2.77 7.42V12h-2.05c-.47-1.16-1.28-2.13-2.31-2.82L16.27 8.5C17.27 9.17 18.06 10.09 18.59 11.1H14V14h4.19c.1-.38.16-.76.16-1.15V12h2.05c-.45-3.08-2.61-5.59-5.38-6.15V3.06L12 2.05v1.01c-3.08.75-5.51 3.5-6 6.95h2.1c.5-1.34 1.49-2.43 2.77-3.14l-1.83-1.83C7.2 6.55 6.13 9.13 6.13 12v.85c.47 1.16 1.28 2.13 2.31 2.82l-1.84 1.84c-1.7-2-2.77-4.58-2.77-7.42V12H3.91C4.36 9.04 6.52 6.53 9.3 5.97V3.06L12 2.05z"/></svg>
           </a>
       </div>
@@ -2053,15 +2067,15 @@ window.onload = function() {
   <input type="file" id="customThemeInput" class="hidden-file-input" accept="image/*" onchange="handleCustomTheme(event)">
 
   <div id="toast-container"></div>
-  <audio id="toast-sound" src="https://files.catbox.moe/vxltiz.mp3" preload="auto"></audio>
-  <audio id="click-sound" src="https://files.catbox.moe/x35kz3.wav" preload="auto"></audio>
+  <audio id="toast-sound" src="media/popup.mp3" preload="auto"></audio>
+<audio id="click-sound" src="media/klik.mp3" preload="auto"></audio>
 
   <script>
     // --- GLOBAL VARIABLES & CONSTANTS ---
     let namaUser = '';
     let nimUser = '';
     let lastLoggedInUser = localStorage.getItem('lastLoggedInUser') || '';
-    const DEFAULT_BACKGROUND_IMAGE = 'https://files.catbox.moe/sxim3d.jpg';
+    const DEFAULT_BACKGROUND_IMAGE = 'media/bg.jpg';
     const ADMIN_EMAIL = 'uchihafans2@gmail.com';
 
     // Supabase Configuration
